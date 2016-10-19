@@ -1,0 +1,36 @@
+---
+version: '2.0'
+
+live_migrate_vms:
+    description: live migrate vms from given host
+    type: direct
+
+    input:
+        - search_opts
+        - host
+        - block_migration
+        - disk_over_commit
+
+    tasks:
+        list_vms:
+            action: nova.servers_list search_opts=<% $.search_opts %>
+            publish:
+                vms: <% $.list_vms %>
+            on-success: filter_vms
+
+        filter_vms:
+            with-items: vm in <% $.vms %>
+            action: custom.filter_vm flavor=<% $.vm.flavor.id %> metadata=<% $.vm.metadata %> uuid=<% $.vm.id %>
+            publish:
+                filtered_vms: <% $.filter_vms %>
+            on-success: live_migrate_vms
+            retry:
+                delay: 5
+                count: 10
+
+        live_migrate_vms:
+            with-items: vm in <% $.filtered_vms %>
+            action: custom.live_migrate uuid=<% $.vm.uuid %> live_migrate=<% $.vm.live_migrate %> host=<% $.host %> block_migration=<% $.block_migration %> disk_over_commit=<% $.disk_over_commit %>
+            retry:
+                delay: 5
+                count: 10
