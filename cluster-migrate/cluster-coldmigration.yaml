@@ -1,0 +1,39 @@
+---
+version: '2.0'
+
+cluster-coldmigration:
+    description: cold migrate vms from given cluster
+    type: direct
+
+    input:
+        - cluster_id
+        - flavor_id
+
+    tasks:
+        list_vms:
+            action: nova.servers_list
+            publish:
+                vms: <% $.list_vms %>
+            on-success: filter_vms
+
+        filter_vms:
+            with-items: vm in <% $.vms %>
+            action: custom.filter_vm flavor=<% $.vm.flavor.id %> metadata=<% $.vm.metadata %> uuid=<% $.vm.id %> cluster_id=<% $.cluster_id %>
+            publish:
+                filtered_vms: <% $.filter_vms %>
+            on-success: cold_migrate_vms
+            retry:
+                delay: 5
+                count: 10
+
+        cold_migrate_vms:
+            with-items: vm in <% $.filtered_vms %>
+            action: custom.cold_migrate uuid=<% $.vm.uuid %> migrate=<% $.vm.migrate %> flavor_id=<% $.flavor_id %>
+            on-success: validate_migrate_vms
+            retry:
+                delay: 5
+                count: 10
+
+        validate_migrate_vms:
+            with-items: vm in <% $.filtered_vms %>
+            action: custom.validate_resize new_flavor=<% $.vm.flavor.id %> flavor_id=<% $.flavor_id %>
