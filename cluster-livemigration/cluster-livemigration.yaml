@@ -30,7 +30,7 @@ cluster-livemigration:
 
         live_migrate_vms:
             with-items: vm in <% $.filtered_vms %>
-            action: custom.live_migrate uuid=<% $.vm.uuid %> live_migrate=<% $.vm.live_migrate %> host=<% $.host %> block_migration=<% $.block_migration %> disk_over_commit=<% $.disk_over_commit %>
+            action: custom.live_migrate uuid=<% $.vm.uuid %> migrate=<% $.vm.migrate %> host=<% $.host %> block_migration=<% $.block_migration %> disk_over_commit=<% $.disk_over_commit %>
             retry:
                 delay: 5
                 count: 10
