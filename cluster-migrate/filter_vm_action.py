@@ -2,7 +2,7 @@
 FilterVmAction - custom action.
 
 Simple action for filtering VM on the presence of metadata/extra spec
-"cluster_id" flag
+"cluster" flag
 """
 from mistral.actions.openstack.actions import NovaAction
 from mistral.workflow.utils import Result
@@ -14,7 +14,7 @@ class FilterVmException(Exception):
 
 class FilterVmAction(NovaAction):
     """
-    Filter and return VMs whith the flag 'cluster_id' either on vm metadtata
+    Filter and return VMs whith the flag 'cluster' either on vm metadtata
     or flavor extra spec.
     """
 
@@ -30,8 +30,8 @@ class FilterVmAction(NovaAction):
         client = self._get_client()
         metadata = self._metadata
 
-        if str(metadata.get('cluster_id')) == str(self._cluster_id):
-            return Result(data={'live_migrate': True, 'uuid': self._uuid})
+        if str(metadata.get('cluster')) == str(self._cluster_id):
+            return Result(data={'migrate': True, 'uuid': self._uuid})
 
         # Ether is no metadata for vm - check flavor.
         try:
@@ -49,6 +49,6 @@ class FilterVmAction(NovaAction):
         cluster_id = flavor.get_keys().get('cluster_id:cluster_id')
 
         if str(cluster_id) == str(self._cluster_id):
-            return Result(data={'live_migrate': True, 'uuid': self._uuid})
+            return Result(data={'migrate': True, 'uuid': self._uuid})
 
-        return Result(data={'live_migrate': False, 'uuid': self._uuid})
+        return Result(data={'migrate': False, 'uuid': self._uuid})
