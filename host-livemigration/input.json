@@ -1,8 +1,0 @@
-{
-  "search_opts": {
-    "host": "ubuntu2"
-  },
-  "host": "ubuntu1",
-  "block_migration": "False",
-  "disk_over_commit": "False"
-}
