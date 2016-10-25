@@ -15,7 +15,7 @@ class ValidateHostAction(NovaAction):
         client = self._get_client()
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(self._host, 22)
+        ssh.connect(self._host, 22)# make sure that ./ssh/authorized_keys is already set
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("virsh --version")
         remote_version = ssh_stdout.readline()
 
