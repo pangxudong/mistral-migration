@@ -1,6 +1,6 @@
 {
-  "cluster_id": "ab66fb58-11d3-4eb0-9398-5d2f69d85be6",
-  "host": "ubuntu1",
+  "cluster_id": "597fa3a5-2e83-4590-8301-8928a9d0cb90",
+  "host": "ubuntu2",
   "block_migration": "False",
   "disk_over_commit": "False"
 }

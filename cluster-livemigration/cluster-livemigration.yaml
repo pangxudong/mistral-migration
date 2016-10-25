@@ -29,10 +29,10 @@ cluster-livemigration:
                 count: 10
 
         validate_host:
-           with-items: vm in <% $.vms %>
+           with-items: vm in <% $.filtered_vms %>
            action: custom.validate_host host=<% $.host %> uuid=<% $.vm.uuid %> migrate=<% $.vm.migrate %> 
            publish:
-               validated_vms: <% $.validated_vms %>
+               validated_vms: <% $.validate_host %>
            on-success: live_migrate_vms
            retry:
                delay: 5

@@ -15,5 +15,5 @@ class LiveMigrateVmAction(NovaAction):
     def run(self):
         client = self._get_client()
 
-        if (self._migrate && self._live_migrate):
+        if (self._migrate and self._live_migrate):
             client.servers.live_migrate(self._uuid, host=self._host, block_migration=self._block_migration, disk_over_commit=self._disk_over_commit)
