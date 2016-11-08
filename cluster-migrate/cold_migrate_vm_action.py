@@ -14,5 +14,5 @@ class ColdMigrateVmAction(NovaAction):
 
         if self._migrate:
             client.servers.resize(self._uuid, flavor=self._flavor_id)
-            time.sleep(10)
-            client.servers.confirm_resize(self._uuid)
+#            time.sleep(10)
+#            client.servers.confirm_resize(self._uuid)
