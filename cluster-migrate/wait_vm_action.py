@@ -11,4 +11,5 @@ class WaitVmAction(NovaAction):
         client = self._get_client()
 
         if self._migrate:
-            client.servers.findall(status="VERIFY_RESIZE")
+            # client.servers.findall(status="VERIFY_RESIZE")
+            client.servers.find(id=self._uuid, status="VERIFY_RESIZE")
